@@ -73,7 +73,7 @@ class student extends person{
         return classID;
     }
 
-    public void setName(String classID){
+    public void setclassID(String classID){
         this.classID=classID;
     }
 }
@@ -102,5 +102,32 @@ class accquaintances extends person{
 
     public void setRelation(String Relation){
         this.Relation=Relation;
+    }
+}
+
+class teacher extends person{
+    private String ID;
+    private String subID;
+
+    public teacher(String Name,Date biDate,String Address,String Tel,String ID,String subID){
+        super(Name, biDate, Address, Tel);
+        this.ID=ID;
+        this.subID=subID;
+    }
+
+    public String getID(){
+        return ID;
+    }
+
+    public void setID(String ID){
+        this.ID=ID;
+    }
+
+    public String getsubID(){
+        return subID;
+    }
+
+    public void setsubID(String subID){
+        this.subID=subID;
     }
 }
