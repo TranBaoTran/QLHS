@@ -121,7 +121,8 @@ public class admin extends JFrame
         nameTxt.setColumns(15);
         JLabel idLabel = new JLabel("Mã học sinh");
         JTextField idTxt=new JTextField("");
-        JButton search =new JButton("Tìm");
+        ImageIcon icon = new ImageIcon(admin.class.getResource("/img/search.png"));
+        JButton search =new JButton(icon);
         search.setPreferredSize(new Dimension(55, 30));
         idTxt.setColumns(15);
 
@@ -189,7 +190,8 @@ public class admin extends JFrame
         JLabel idLabel = new JLabel("Mã giáo viên");
         JTextField idTxt=new JTextField("");
         idTxt.setColumns(15);
-        JButton search =new JButton("Tìm");
+        ImageIcon icon = new ImageIcon(admin.class.getResource("/img/search.png"));
+        JButton search =new JButton(icon);
         search.setPreferredSize(new Dimension(70, 30));
 
         //Table
@@ -259,7 +261,8 @@ public class admin extends JFrame
         JDatePickerImpl startDate = new JDatePickerImpl(new JDatePanelImpl(new UtilDateModel()));
         JDatePickerImpl endDate = new JDatePickerImpl(new JDatePanelImpl(new UtilDateModel()));
         JLabel endLabel = new JLabel("Kết thúc");
-        JButton search =new JButton("Tìm");
+        ImageIcon icon = new ImageIcon(admin.class.getResource("/img/search.png"));
+        JButton search =new JButton(icon);
         search.setPreferredSize(new Dimension(70, 30));
 
         //Table
@@ -348,11 +351,22 @@ public class admin extends JFrame
         JPanel DC = new JPanel(new FlowLayout(FlowLayout.LEFT));
         DC.setPreferredSize(new Dimension(700,30));
         DC.add(new JLabel("Địa chỉ :"));
-        DC.setPreferredSize(new Dimension(700,30));
         DC.add(Box.createRigidArea(new Dimension(20, 0)));
         JTextField address=new JTextField("");
         address.setColumns(30);
         DC.add(address);
+        JPanel DS = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        DS.setPreferredSize(new Dimension(700,40));
+        DS.add(new JLabel("Danh sách lớp :"));
+        String[] optionsClass = {"--Lớp--", "12A1", "12A2", "12A3", "12A4"};
+        JComboBox classCombo = new JComboBox(optionsClass);
+        DS.add(classCombo);
+        JButton add= new JButton("Thêm");
+        JButton era = new JButton("Xoá");
+        DS.add(Box.createRigidArea(new Dimension(5, 0)));
+        DS.add(add);
+        DS.add(Box.createRigidArea(new Dimension(5, 0)));
+        DS.add(era);
 
         //button
         JPanel butPanel=new JPanel(new FlowLayout(FlowLayout.RIGHT));
@@ -368,7 +382,8 @@ public class admin extends JFrame
         LCon.add(HK);
         LCon.add(NH);
         LCon.add(DC);
-        LCon.add(Box.createRigidArea(new Dimension(750,230))); 
+        LCon.add(DS);
+        LCon.add(Box.createRigidArea(new Dimension(750,180))); 
         LCon.add(butPanel);
     }
 

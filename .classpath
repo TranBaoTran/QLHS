@@ -12,5 +12,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/jdatepicker-1.3.2.jar"/>
+	<classpathentry kind="lib" path="lib/bcrypt-0.10.2-javadoc.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
