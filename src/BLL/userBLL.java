@@ -37,5 +37,20 @@ public class userBLL{
             return -1;
         }
     }
+
+    public String upPass(user u){
+        if(u.getuserName().substring(0, 2).equals("HS")){
+            uDAL.setTable("TKhocsinh");
+        }
+        else{
+            uDAL.setTable("TKgiaovien");
+        }
+        if(uDAL.updatePass(u)){
+            return "Thay đổi thành công";
+        }
+        else{
+            return "Đã có lỗi xảy ra trong quá trình thay đổi.Vui lòng thử lại";
+        }
+    }
 }
 

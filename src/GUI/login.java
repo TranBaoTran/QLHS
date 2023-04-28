@@ -46,7 +46,7 @@ public class login extends JFrame implements ActionListener{
         txtPass.setBounds(120,80,180,25);
         icon = new ImageIcon(getClass().getResource("/img/eye.png"));
         icons = new ImageIcon(getClass().getResource("/img/eyeslash.png"));
-        seeBut = new JButton(icon);
+        seeBut = new JButton(icons);
 
         seeBut.addActionListener(this);
 
@@ -75,10 +75,10 @@ public class login extends JFrame implements ActionListener{
         if(e.getSource( )== seeBut){
             if ( txtPass.getEchoChar() != '*' ) {
                 txtPass.setEchoChar('*');
-                seeBut.setIcon(icon);
+                seeBut.setIcon(icons);
             } else {
                 txtPass.setEchoChar((char)0);
-                seeBut.setIcon(icons);
+                seeBut.setIcon(icon);
             }
         }
         else{

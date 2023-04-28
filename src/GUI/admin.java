@@ -19,6 +19,7 @@ import BLL.thongtinBLL;
 import DTO.taikhoan;
 import DTO.thongtin;
 
+
 public class admin extends JFrame
 {
     taikhoanBLL tkBLL= new taikhoanBLL();
@@ -385,7 +386,9 @@ public class admin extends JFrame
         editButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e){
-
+                int row=jTable.getSelectedRow();
+                String ma=jTable.getModel().getValueAt(row,3).toString();
+                
             }
         });
 

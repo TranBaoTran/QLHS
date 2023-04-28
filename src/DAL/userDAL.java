@@ -69,4 +69,27 @@ public class userDAL{
         }
         return re;
     }
+
+    public boolean updatePass(user u){
+        boolean re=false;
+        if(Open()){
+            try{
+                String sql="update "+this.Table+" set matkhau=? where tenTK=?";
+                System.out.println(sql);
+                PreparedStatement preparedStatement = this.conn.prepareStatement(sql);
+                String hash = BCrypt.hashpw(u.getpassword(), BCrypt.gensalt(12));
+                preparedStatement.setString(1,hash);
+                preparedStatement.setString(2,u.getuserName());
+                if(preparedStatement.executeUpdate()>0){
+                    re=true;
+                }
+            }catch(Exception ex){
+                ex.printStackTrace();
+            }
+            finally{
+                Close();
+            }
+        }
+        return re;
+    }
 }
