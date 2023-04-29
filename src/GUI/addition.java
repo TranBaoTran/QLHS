@@ -3,19 +3,21 @@ package GUI;
 import java.awt.event.*;
 import javax.swing.*;
 
+import DTO.taikhoan;
 import DTO.user;
 import BLL.userBLL;
+import BLL.taikhoanBLL;
 
 public class addition {
     
 }
 
 class editTK extends JFrame implements ActionListener{
-    public JPasswordField pass;
-    public JPasswordField txtPass;
-    public JTextField name;
-    public JButton save;
-    public JButton cancel;
+    private JPasswordField pass;
+    private JPasswordField txtPass;
+    private JTextField name;
+    private JButton save;
+    private JButton cancel;
     private ImageIcon icon;
     private ImageIcon icons;
     private JButton seeBut1;
@@ -24,13 +26,13 @@ class editTK extends JFrame implements ActionListener{
 
     public editTK(String ma){
         this.setTitle("Đổi mật khẩu");
-        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     	this.setLayout(null);
         this.setSize(400,280);
         this.setLocationRelativeTo(null);
 
         TenTK=ma;
-        JLabel tk=new JLabel("Mã tài khoản");
+        JLabel tk=new JLabel("Tên tài khoản");
         tk.setBounds(20,30,80,30);
         name =new JTextField(ma);
         name.setEditable(false);
@@ -123,8 +125,100 @@ class editTK extends JFrame implements ActionListener{
             this.dispose();
         }
     }
+}
 
-    public static void main(String args[]){
-        new editTK("HS0001");
+class changeTK extends JFrame implements ActionListener{
+    private JRadioButton ck1;
+    private JRadioButton ck2;
+    private JButton save;
+    private JButton cancel;
+    private JTextField name;
+    private int key;
+    private int k;
+    private taikhoan acc;
+
+    public changeTK(taikhoan ma,JButton cl){
+        this.setTitle("Khoá tài khoản");
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+    	this.setLayout(null);
+        this.setSize(400,250);
+        this.setLocationRelativeTo(null);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                cl.doClick();
+            }
+        });
+
+        acc=ma;
+        JLabel tk=new JLabel("Tên tài khoản");
+        tk.setBounds(80,30,80,30);
+        name =new JTextField(ma.getTen());
+        name.setEditable(false);
+        name.setBounds(210,35,80,25);
+        ck1=new JRadioButton("Khoá");
+        ck1.setBounds(95,80,80,30);
+        ck2=new JRadioButton("Mở khoá");
+        ck2.setBounds(195,80,80,30);
+        ButtonGroup bg = new ButtonGroup();
+        bg.add(ck1);
+        bg.add(ck2);
+
+        if(ma.getTinhtrang()==0){
+            ck1.setSelected(true);
+            key=0;
+        }
+        else{
+            ck2.setSelected(true);
+            key=1;
+        }
+
+        save=new JButton("Lưu");
+        save.setBounds(80, 140, 100,30);
+        cancel=new JButton("Huỷ");
+        cancel.setBounds(210, 140, 100,30);
+
+        save.addActionListener(this);
+        cancel.addActionListener(this);
+
+        add(tk);
+        add(name);
+        add(ck1);
+        add(ck2);
+        add(save);
+        add(cancel);
+
+        this.setResizable(false);
+        this.setVisible(true);
     }
+
+    public void actionPerformed(ActionEvent e){
+        if(e.getSource()==save){
+            try{
+                if(ck1.isSelected()){
+                    k=0;
+                }
+                if(ck2.isSelected()){
+                    k=1;
+                }
+                if(key==k){
+                    JOptionPane.showMessageDialog(this,"Lưu thành công");
+                }
+                else{
+                    acc.setTinhtrang(k);
+                    int diaRS=JOptionPane.showConfirmDialog(this,"Bạn có chắc chắn muốn lưu");
+                    if(diaRS==JOptionPane.YES_OPTION){
+                        taikhoanBLL tkBLL=new taikhoanBLL();
+                        JOptionPane.showMessageDialog(this,tkBLL.upTT(acc));
+                    }
+                }
+            }catch(Exception ex){
+                JOptionPane.showMessageDialog(this,"Đã xảy ra lỗi vui lòng thử lại");
+            }
+        }
+        if(e.getSource( )== cancel){
+            this.dispose();
+        }
+    }
+
 }

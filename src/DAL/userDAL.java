@@ -75,7 +75,6 @@ public class userDAL{
         if(Open()){
             try{
                 String sql="update "+this.Table+" set matkhau=? where tenTK=?";
-                System.out.println(sql);
                 PreparedStatement preparedStatement = this.conn.prepareStatement(sql);
                 String hash = BCrypt.hashpw(u.getpassword(), BCrypt.gensalt(12));
                 preparedStatement.setString(1,hash);

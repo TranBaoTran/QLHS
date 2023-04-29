@@ -23,6 +23,9 @@ import DTO.thongtin;
 public class admin extends JFrame
 {
     taikhoanBLL tkBLL= new taikhoanBLL();
+    Vector<taikhoan> tk;
+    thongtinBLL infoBLL=new thongtinBLL();
+    thongtin info=infoBLL.getInfo();
 
     public admin(){
         //Vi tri
@@ -301,15 +304,14 @@ public class admin extends JFrame
         DefaultTableModel model=new DefaultTableModel(data, columnNames);
         JTable jTable = new JTable(model);
         jTable.setPreferredSize(new Dimension(633,270));
-        JScrollPane scrollPane = new JScrollPane(jTable,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollPane.setPreferredSize(new Dimension(650,270));
-        jTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         jTable.getColumnModel().getColumn(0).setPreferredWidth(27);
         jTable.getColumnModel().getColumn(1).setPreferredWidth(120);
-        jTable.getColumnModel().getColumn(2).setPreferredWidth(120);
+        jTable.getColumnModel().getColumn(2).setPreferredWidth(90);
         jTable.getColumnModel().getColumn(3).setPreferredWidth(120);
         jTable.getColumnModel().getColumn(4).setPreferredWidth(120);
-        jTable.getColumnModel().getColumn(5).setPreferredWidth(90);
+        jTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        JScrollPane scrollPane = new JScrollPane(jTable,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setPreferredSize(new Dimension(650,270));
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
         jTable.setDefaultRenderer(Object.class, centerRenderer);
@@ -345,7 +347,7 @@ public class admin extends JFrame
                     java.util.Date  ED = new java.util.Date(Edate.getTime());
                     KT = dateFormat.format(ED);
                 }
-                Vector<taikhoan> tk=tkBLL.getTK(Jop,id,name,BD,KT);
+                tk=tkBLL.getTK(Jop,id,name,BD,KT);
                 DefaultTableModel md=new DefaultTableModel(data, columnNames);
                 for(int i=0;i<tk.size();i++){
                     taikhoan acc=tk.get(i);
@@ -365,6 +367,11 @@ public class admin extends JFrame
                 }
                 jTable.setModel(md);
                 jTable.setPreferredSize(new Dimension(633,jTable.getRowHeight()*jTable.getRowCount()));
+                jTable.getColumnModel().getColumn(0).setPreferredWidth(27);
+                jTable.getColumnModel().getColumn(1).setPreferredWidth(120);
+                jTable.getColumnModel().getColumn(2).setPreferredWidth(90);
+                jTable.getColumnModel().getColumn(3).setPreferredWidth(120);
+                jTable.getColumnModel().getColumn(4).setPreferredWidth(120);
             }   
         });
         
@@ -378,7 +385,14 @@ public class admin extends JFrame
         lockButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e){
-
+                int row=jTable.getSelectedRow();
+                try{
+                    taikhoan tmp=tk.get(row);
+                    new changeTK(tmp,search);
+                }
+                catch(Exception ex){
+                    JOptionPane.showMessageDialog(null,"Chưa chọn tài khoản.Vui lòng thử lại");
+                }
             }
         });
 
@@ -386,9 +400,13 @@ public class admin extends JFrame
         editButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e){
-                int row=jTable.getSelectedRow();
-                String ma=jTable.getModel().getValueAt(row,3).toString();
-                
+                try{
+                    int row=jTable.getSelectedRow();
+                    String ma=jTable.getModel().getValueAt(row,3).toString();
+                    new editTK(ma);
+                }catch(Exception ex){
+                    JOptionPane.showMessageDialog(null,"Chưa chọn tài khoản.Vui lòng thử lại");
+                }
             }
         });
 
@@ -561,10 +579,8 @@ public class admin extends JFrame
         LCon.add(contain);
     }
 
-    public static void menuNH(JPanel LCon){
+    public void menuNH(JPanel LCon){
         //changeable
-        thongtinBLL infoBLL=new thongtinBLL();
-        thongtin info=infoBLL.getInfo();
         JPanel title = new JPanel(new FlowLayout(FlowLayout.CENTER));
         title.setPreferredSize(new Dimension(830,20));
         title.add(new JLabel("THÔNG TIN STARFLEET ACADEMY"));
@@ -579,9 +595,11 @@ public class admin extends JFrame
         bg.add(chk2);
         if(info.getHocky()==1){
             chk1.setSelected(true);
+            chk2.setEnabled(false);
         }
         else{
             chk2.setSelected(true);
+            chk1.setEnabled(false);
         }
         HK.add(chk1);
         HK.add(chk2);
@@ -592,10 +610,12 @@ public class admin extends JFrame
         String year[]=info.getNamhoc().split("-");
         JTextField fYear=new JTextField(year[0]);
         fYear.setColumns(5);
+        fYear.setEditable(false);
         NH.add(fYear);
         NH.add(new JLabel(" - "));
         JTextField lYear=new JTextField(year[1]);
         lYear.setColumns(5);
+        lYear.setEditable(false);
         NH.add(lYear);
         JPanel DC = new JPanel(new FlowLayout(FlowLayout.LEFT));
         DC.setPreferredSize(new Dimension(700,30));
@@ -603,24 +623,94 @@ public class admin extends JFrame
         DC.add(Box.createRigidArea(new Dimension(20, 0)));
         JTextField address=new JTextField(info.getDiachi());
         address.setColumns(35);
+        address.setEditable(false);
         DC.add(address);
-        JPanel DS = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
         //button
         JPanel butPanel=new JPanel(new FlowLayout(FlowLayout.RIGHT));
         butPanel.setPreferredSize(new Dimension(800,35)); 
-        JButton addButton =new JButton("Lưu");
-        JButton editButton =new JButton("Huỷ");
-        butPanel.add(addButton);
-        butPanel.add(Box.createRigidArea(new Dimension(5, 0)));
+        JButton editButton =new JButton("Sửa");
+        JButton saveButton =new JButton("Lưu");
+        saveButton.setEnabled(false);
+
+        //action
+        editButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e){
+                if(info.getHocky()==1){
+                    chk2.setEnabled(true);
+                }
+                else{
+                    chk1.setEnabled(true);
+                }
+                fYear.setEditable(true);
+                lYear.setEditable(true);
+                address.setEditable(true);
+                saveButton.setEnabled(true);
+                editButton.setEnabled(false);
+            }
+        });
+        saveButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e){
+                try{
+                    int diaRS=JOptionPane.showConfirmDialog(null,"Bạn có chắc chắn muốn lưu");
+                    if(diaRS==JOptionPane.YES_OPTION){
+                        int HK=0;
+                        if(chk1.isSelected()){
+                            HK=1;
+                        }
+                        else{
+                            HK=2;
+                        }
+                        String FY=fYear.getText().trim();
+                        String LY=lYear.getText().trim();
+                        String fullY=FY+"-"+LY;
+                        String AR=address.getText().trim();
+                        thongtin n=new thongtin(fullY, HK, AR);
+                        if(n.getHocky()==info.getHocky() && n.getNamhoc().equals(info.getNamhoc()) && n.getDiachi().equals(info.getDiachi())){
+                            JOptionPane.showMessageDialog(null,"Lưu thành công");
+                        }
+                        else{
+                            int key=infoBLL.upInfo(n);
+                            System.out.println(key);   
+                        }
+                    }
+                }catch(Exception ex){
+                    JOptionPane.showMessageDialog(null,"Đã xảy ra lỗi vui lòng thử lại");
+                }finally{
+                    if(info.getHocky()==1){
+                        chk2.setEnabled(false);
+                        chk1.setSelected(true);
+                        chk1.setEnabled(true);
+                    }
+                    else{
+                        chk1.setEnabled(false);
+                        chk2.setSelected(true);
+                        chk2.setEnabled(true);
+                    }
+                    String year[]=info.getNamhoc().split("-");
+                    fYear.setText(year[0]);
+                    fYear.setEditable(false);
+                    lYear.setText(year[1]);
+                    lYear.setEditable(false);
+                    address.setText(info.getDiachi());
+                    address.setEditable(false);
+                    editButton.setEnabled(true);
+                    saveButton.setEnabled(false);
+                }
+            }
+        });
+        //addbutton
         butPanel.add(editButton);
+        butPanel.add(Box.createRigidArea(new Dimension(5, 0)));
+        butPanel.add(saveButton);
         
         //add
         LCon.add(title);
         LCon.add(HK);
         LCon.add(NH);
         LCon.add(DC);
-        LCon.add(DS);
         LCon.add(Box.createRigidArea(new Dimension(750,220))); 
         LCon.add(butPanel);
     }

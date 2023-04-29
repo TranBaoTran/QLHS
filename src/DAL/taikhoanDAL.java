@@ -38,8 +38,11 @@ public class taikhoanDAL {
     }
     }
 
+    public void setTable(String Table){
+        this.Table=Table;
+    }
+
     public Vector<taikhoan> getListGV(String sql){
-        System.out.println(sql);
         Vector<taikhoan> arr = new Vector<taikhoan>();
         if(Open()){
             try{
@@ -64,7 +67,6 @@ public class taikhoanDAL {
     }
 
     public Vector<taikhoan> getListHS(String sql){
-        System.out.println(sql);
         Vector<taikhoan> arr = new Vector<taikhoan>();
         if(Open()){
             try{
@@ -86,5 +88,26 @@ public class taikhoanDAL {
             }
         } 
         return arr;
+    }
+
+    public boolean updateTT(taikhoan u){
+        boolean re=false;
+        if(Open()){
+            try{
+                String sql="update "+this.Table+" set tinhtrang=? where tenTK=?";
+                PreparedStatement preparedStatement = this.conn.prepareStatement(sql);
+                preparedStatement.setInt(1,u.getTinhtrang());
+                preparedStatement.setString(2,u.getTen());
+                if(preparedStatement.executeUpdate()>0){
+                    re=true;
+                }
+            }catch(Exception ex){
+                ex.printStackTrace();
+            }
+            finally{
+                Close();
+            }
+        }
+        return re;
     }
 }

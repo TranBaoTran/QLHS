@@ -77,4 +77,19 @@ public class taikhoanBLL {
         }
         return tmp;
     }
+
+    public String upTT(taikhoan u){
+        if(u.getTen().substring(0, 2).equals("HS")){
+            tk.setTable("TKhocsinh");
+        }
+        else{
+            tk.setTable("TKgiaovien");
+        }
+        if(tk.updateTT(u)){
+            return "Đã thay đổi thành công";
+        }
+        else{
+            return "Đã có lỗi xảy ra trong quá trình thay đổi.Vui lòng thử lại";
+        }
+    }
 }

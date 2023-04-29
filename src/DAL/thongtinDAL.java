@@ -65,4 +65,19 @@ public class thongtinDAL {
             return inform;
         }
     }
+
+    public int upThongTin(thongtin u){
+        int re=1;
+        if(Open()){
+            try{
+                
+            }catch(Exception ex){
+                ex.printStackTrace();
+            }
+            finally{
+                Close();
+            }
+        }
+        return re;
+    }
 }
